@@ -23,7 +23,7 @@ app.get('/health', (_req: Request, res: Response) => {
 // Serve React frontend in production
 const clientDist = path.join(__dirname, '../../client/dist');
 app.use(express.static(clientDist));
-app.get('*', (_req: Request, res: Response) => {
+app.get(/(.*)/, (_req: Request, res: Response) => {
   res.sendFile(path.join(clientDist, 'index.html'));
 });
 
