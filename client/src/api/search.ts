@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { SearchResult } from '../types';
+import type { SearchResult } from '../types';
 
 const API_BASE = 'http://localhost:4000/api';
 

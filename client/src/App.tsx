@@ -2,7 +2,7 @@ import { useState } from 'react';
 import './App.css';
 import CategoryInput from './components/CategoryInput';
 import { searchAllCategories } from './api/search';
-import { SearchResult } from './types';
+import type { SearchResult } from './types';
 
 function App() {
   const [results, setResults] = useState<SearchResult[]>([]);
