@@ -164,6 +164,8 @@ export default function MainApp() {
 
             {dashLoading ? (
               <p className="status-msg">Loading saved items…</p>
+            ) : dashError ? (
+              <p className="status-msg" style={{ color: 'red' }}>{dashError}</p>
             ) : saved.length === 0 ? (
               <div className="empty-dashboard">
                 <p>No saved items yet.</p>
