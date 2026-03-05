@@ -12,6 +12,8 @@ export interface Product {
   deliveryDays: number | null;
   minOrderQty: number;
   sellerName: string;
+  sellerVerified?: boolean;
+  sellerYears?: number;
   platform: 'aliexpress' | 'alibaba';
 }
 

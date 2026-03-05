@@ -5,7 +5,7 @@ const API_BASE = 'http://localhost:4000/api';
 
 export async function searchCategory(category: string): Promise<SearchResult> {
   const { data } = await axios.get<SearchResult>(`${API_BASE}/search`, {
-    params: { category, platform: 'aliexpress' },
+    params: { category },
   });
   return data;
 }

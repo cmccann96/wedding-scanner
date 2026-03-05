@@ -42,9 +42,10 @@ function App() {
                 <a key={p.id} href={p.productUrl} target="_blank" rel="noreferrer" className="product-card">
                   <img src={p.imageUrl} alt={p.title} />
                   <div className="product-info">
+                    <span className={`platform-badge ${p.platform}`}>{p.platform === 'alibaba' ? 'Alibaba' : 'AliExpress'}</span>
                     <p className="product-title">{p.title}</p>
-                    <p className="product-price">${p.price.toFixed(2)}</p>
-                    <p className="product-meta">⭐ {p.rating} · {p.orderCount} orders</p>
+                    <p className="product-price">${p.price.toFixed(2)}{p.platform === 'alibaba' && p.minOrderQty > 1 ? ` · MOQ: ${p.minOrderQty}` : ''}</p>
+                    <p className="product-meta">⭐ {p.rating} · {p.platform === 'aliexpress' ? `${p.orderCount} orders` : p.sellerVerified ? '✓ Verified' : p.sellerYears ? `${p.sellerYears}yr seller` : ''}</p>
                   </div>
                 </a>
               ))}
