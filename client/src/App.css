@@ -241,3 +241,29 @@ body {
   background: #ff8c00;
   color: white;
 }
+
+/* Score Badge */
+.score-badge {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  color: white;
+  font-size: 1rem;
+  font-weight: 700;
+  padding: 4px 10px;
+  border-radius: 999px;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.2);
+}
+
+.score-label {
+  font-size: 0.7rem;
+  font-weight: 600;
+  opacity: 0.9;
+}
+
+.product-card {
+  position: relative;
+}
