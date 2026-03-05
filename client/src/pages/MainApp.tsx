@@ -33,10 +33,15 @@ export default function MainApp() {
     if (!token) { navigate('/login'); return; }
   }, [token, navigate]);
 
+  const [dashError, setDashError] = useState<string | null>(null);
+
   useEffect(() => {
     if (tab === 'dashboard' && token) {
       setDashLoading(true);
-      fetchSaved(token).then(data => { setSaved(data); setDashLoading(false); });
+      setDashError(null);
+      fetchSaved(token)
+        .then(data => { setSaved(data); setDashLoading(false); })
+        .catch(() => { setDashError('Failed to load saved items. Please try again.'); setDashLoading(false); });
     }
   }, [tab, token]);
 
