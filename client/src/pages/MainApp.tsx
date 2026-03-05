@@ -10,7 +10,7 @@ import SkeletonCard from '../components/SkeletonCard';
 import type { SearchResult } from '../types';
 import type { Product } from '../types';
 
-type Tab = 'scanner' | 'dashboard';
+type Tab = 'scanner' | 'dashboard' | 'strava';
 
 export default function MainApp() {
   const { username, token, logout } = useAuth();
@@ -109,6 +109,9 @@ export default function MainApp() {
           </button>
           <button className={`tab-btn ${tab === 'dashboard' ? 'active' : ''}`} onClick={() => setTab('dashboard')}>
             🏠 My Dashboard {saved.length > 0 && tab !== 'dashboard' && <span className="tab-badge">{saved.length}</span>}
+          </button>
+          <button className={`tab-btn ${tab === 'strava' ? 'active' : ''}`} onClick={() => setTab('strava')}>
+            🏃 Liam's Strava Tracker
           </button>
         </div>
       </header>
@@ -230,6 +233,13 @@ export default function MainApp() {
               </>
             )}
           </>
+        )}
+        {tab === 'strava' && (
+          <div style={{ textAlign: 'center', padding: '80px 20px' }}>
+            <div style={{ fontSize: '5rem', marginBottom: '16px' }}>🏃</div>
+            <h2 style={{ color: '#1b3a2d', fontSize: '1.6rem', marginBottom: '8px' }}>Liam's Strava Tracker</h2>
+            <p style={{ color: '#4a9e6b', fontSize: '1.1rem', fontWeight: 600 }}>Update coming soon — he's very fast 🏃</p>
+          </div>
         )}
       </main>
     </div>
