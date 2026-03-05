@@ -11,7 +11,7 @@ import type { SearchResult } from './types';
 import { getSaved } from './utils/saved';
 
 function App() {
-  const { user, logout } = useAuth();
+  const { username, logout } = useAuth();
   const navigate = useNavigate();
   const [results, setResults] = useState<SearchResult[]>([]);
   const [loading, setLoading] = useState(false);
@@ -46,17 +46,13 @@ function App() {
             <p>Find the best deals on Alibaba &amp; AliExpress for your big day</p>
           </div>
           <div className="header-actions">
-            {user ? (
+            {username ? (
               <>
-                <span className="user-email">👤 {user.email}</span>
-                <button className="saved-header-btn" onClick={() => navigate('/dashboard')}>📋 My Saved</button>
+                <span className="user-email">👤 {username}</span>
                 <button className="saved-header-btn logout-btn" onClick={() => { logout(); }}>Sign Out</button>
               </>
             ) : (
-              <>
-                <button className="saved-header-btn" onClick={() => navigate('/login')}>Sign In</button>
-                <button className="saved-header-btn" onClick={() => navigate('/register')}>Register</button>
-              </>
+              <button className="saved-header-btn" onClick={() => navigate('/login')}>Sign In</button>
             )}
             <button className="saved-header-btn" onClick={() => setShowSaved(true)}>
               🔖 Saved {savedCount > 0 && <span className="saved-count-badge">{savedCount}</span>}

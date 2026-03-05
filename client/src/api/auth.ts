@@ -2,14 +2,9 @@ import axios from 'axios';
 
 const BASE = 'http://localhost:4000/api';
 
-export async function register(email: string, password: string) {
-  const res = await axios.post(`${BASE}/auth/register`, { email, password });
-  return res.data as { token: string; user: { id: number; email: string } };
-}
-
-export async function login(email: string, password: string) {
-  const res = await axios.post(`${BASE}/auth/login`, { email, password });
-  return res.data as { token: string; user: { id: number; email: string } };
+export async function login(username: string, password: string) {
+  const res = await axios.post(`${BASE}/auth/login`, { username, password });
+  return res.data as { token: string; user: { username: string } };
 }
 
 export async function fetchSaved(token: string) {

@@ -1,13 +1,13 @@
 import { useState } from 'react';
 import type { FormEvent } from 'react';
-import { useNavigate, Link } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { login } from '../api/auth';
 import { useAuth } from '../context/AuthContext';
 
 export default function LoginPage() {
   const { login: setAuth } = useAuth();
   const navigate = useNavigate();
-  const [email, setEmail] = useState('');
+  const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
@@ -17,9 +17,9 @@ export default function LoginPage() {
     setError('');
     setLoading(true);
     try {
-      const { token, user } = await login(email, password);
-      setAuth(token, user);
-      navigate('/dashboard');
+      const { token, user } = await login(username, password);
+      setAuth(token, user.username);
+      navigate('/app');
     } catch (err: any) {
       setError(err.response?.data?.error ?? 'Login failed');
     } finally {
@@ -33,16 +33,15 @@ export default function LoginPage() {
         <h1>💍 Wedding Scanner</h1>
         <h2>Sign In</h2>
         <form onSubmit={handleSubmit} className="auth-form">
-          <label>Email</label>
-          <input type="email" value={email} onChange={e => setEmail(e.target.value)} required autoFocus />
+          <label>Username</label>
+          <input type="text" value={username} onChange={e => setUsername(e.target.value)} required autoFocus autoComplete="username" />
           <label>Password</label>
-          <input type="password" value={password} onChange={e => setPassword(e.target.value)} required />
+          <input type="password" value={password} onChange={e => setPassword(e.target.value)} required autoComplete="current-password" />
           {error && <p className="auth-error">{error}</p>}
           <button type="submit" className="auth-btn" disabled={loading}>
             {loading ? 'Signing in…' : 'Sign In'}
           </button>
         </form>
-        <p className="auth-switch">Don't have an account? <Link to="/register">Register</Link></p>
       </div>
     </div>
   );

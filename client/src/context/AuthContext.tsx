@@ -1,11 +1,10 @@
 import { createContext, useContext, useState } from 'react';
 import type { ReactNode } from 'react';
 
-interface User { id: number; email: string; }
 interface AuthCtx {
-  user: User | null;
+  username: string | null;
   token: string | null;
-  login: (token: string, user: User) => void;
+  login: (token: string, username: string) => void;
   logout: () => void;
 }
 
@@ -13,26 +12,23 @@ const AuthContext = createContext<AuthCtx>({} as AuthCtx);
 
 export function AuthProvider({ children }: { children: ReactNode }) {
   const [token, setToken] = useState<string | null>(() => localStorage.getItem('ws-token'));
-  const [user, setUser] = useState<User | null>(() => {
-    const u = localStorage.getItem('ws-user');
-    return u ? JSON.parse(u) : null;
-  });
+  const [username, setUsername] = useState<string | null>(() => localStorage.getItem('ws-username'));
 
-  const login = (t: string, u: User) => {
+  const login = (t: string, u: string) => {
     setToken(t);
-    setUser(u);
+    setUsername(u);
     localStorage.setItem('ws-token', t);
-    localStorage.setItem('ws-user', JSON.stringify(u));
+    localStorage.setItem('ws-username', u);
   };
 
   const logout = () => {
     setToken(null);
-    setUser(null);
+    setUsername(null);
     localStorage.removeItem('ws-token');
-    localStorage.removeItem('ws-user');
+    localStorage.removeItem('ws-username');
   };
 
-  return <AuthContext.Provider value={{ user, token, login, logout }}>{children}</AuthContext.Provider>;
+  return <AuthContext.Provider value={{ username, token, login, logout }}>{children}</AuthContext.Provider>;
 }
 
 export function useAuth() { return useContext(AuthContext); }
