@@ -537,7 +537,7 @@ body {
   flex-wrap: wrap;
 }
 
-.pill {
+.pill, .filter-pill {
   padding: 8px 20px !important;
   border-radius: 999px !important;
   border: 2px solid #c8ddd0 !important;
@@ -551,14 +551,14 @@ body {
   line-height: 1;
 }
 
-.pill.active {
+.pill.active, .filter-pill.active {
   background: #1b3a2d !important;
   border-color: #1b3a2d !important;
   color: white !important;
   box-shadow: 0 2px 8px rgba(27,58,45,0.3);
 }
 
-.pill:hover:not(.active) {
+.pill:hover:not(.active), .filter-pill:hover:not(.active) {
   border-color: #4a9e6b !important;
   color: #4a9e6b !important;
   background: #f0faf4 !important;
