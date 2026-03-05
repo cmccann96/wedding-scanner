@@ -1,14 +1,22 @@
+import { useState } from 'react';
 import type { SearchResult } from '../types';
+import type { ScoreBreakdown } from '../utils/scoring';
 import { scoreProduct, getScoreColor, getScoreLabel } from '../utils/scoring';
+import ScoreModal from './ScoreModal';
 
 interface Props {
   result: SearchResult;
 }
 
+interface ModalState {
+  title: string;
+  score: ScoreBreakdown;
+}
+
 export default function ResultsSection({ result }: Props) {
+  const [modal, setModal] = useState<ModalState | null>(null);
   const { category, results } = result;
 
-  // Score and sort all products best first
   const scored = results
     .map(p => ({ product: p, score: scoreProduct(p, results) }))
     .sort((a, b) => b.score.total - a.score.total);
@@ -18,6 +26,14 @@ export default function ResultsSection({ result }: Props) {
 
   return (
     <div className="results-section">
+      {modal && (
+        <ScoreModal
+          productTitle={modal.title}
+          score={modal.score}
+          onClose={() => setModal(null)}
+        />
+      )}
+
       <div className="results-header">
         <h2>{category}</h2>
         <div className="results-meta">
@@ -40,13 +56,18 @@ export default function ResultsSection({ result }: Props) {
             >
               <div className="product-img-wrap">
                 <img src={p.imageUrl} alt={p.title} />
-                <div
+                <button
                   className="score-badge"
                   style={{ backgroundColor: getScoreColor(score.total) }}
+                  onClick={e => {
+                    e.preventDefault();
+                    setModal({ title: p.title, score });
+                  }}
+                  title="Click to see score breakdown"
                 >
                   {score.total}
                   <span className="score-label">{getScoreLabel(score.total)}</span>
-                </div>
+                </button>
               </div>
               <div className="product-info">
                 <span className={`platform-badge ${p.platform}`}>
