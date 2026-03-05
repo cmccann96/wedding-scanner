@@ -3,14 +3,18 @@ import './App.css';
 import CategoryInput from './components/CategoryInput';
 import ResultsSection from './components/ResultsSection';
 import SkeletonCard from './components/SkeletonCard';
+import SavedDrawer from './components/SavedDrawer';
 import { searchAllCategories } from './api/search';
 import type { SearchResult } from './types';
+import { getSaved } from './utils/saved';
 
 function App() {
   const [results, setResults] = useState<SearchResult[]>([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [searchedCategories, setSearchedCategories] = useState<string[]>([]);
+  const [showSaved, setShowSaved] = useState(false);
+  const [savedCount, setSavedCount] = useState(() => getSaved().length);
 
   const handleSearch = async (categories: string[]) => {
     setLoading(true);
@@ -25,14 +29,22 @@ function App() {
       console.error(err);
     } finally {
       setLoading(false);
+      setSavedCount(getSaved().length);
     }
   };
 
   return (
     <div className="app">
       <header className="app-header">
-        <h1>💍 Wedding Scanner</h1>
-        <p>Find the best deals on Alibaba &amp; AliExpress for your big day</p>
+        <div className="header-top">
+          <div>
+            <h1>💍 Wedding Scanner</h1>
+            <p>Find the best deals on Alibaba &amp; AliExpress for your big day</p>
+          </div>
+          <button className="saved-header-btn" onClick={() => setShowSaved(true)}>
+            🔖 Saved {savedCount > 0 && <span className="saved-count-badge">{savedCount}</span>}
+          </button>
+        </div>
       </header>
       <main className="app-main">
         <CategoryInput onSearch={handleSearch} />
@@ -56,9 +68,11 @@ function App() {
         )}
 
         {!loading && results.map(r => (
-          <ResultsSection key={r.category} result={r} />
+          <ResultsSection key={r.category} result={r} onSaveChange={() => setSavedCount(getSaved().length)} />
         ))}
       </main>
+
+      {showSaved && <SavedDrawer onClose={() => setShowSaved(false)} />}
     </div>
   );
 }
