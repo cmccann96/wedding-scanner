@@ -1,7 +1,7 @@
 import axios from 'axios';
 import type { SearchResult } from '../types';
 
-const API_BASE = 'http://localhost:4000/api';
+const API_BASE = '/api';
 
 export async function searchCategory(category: string): Promise<SearchResult> {
   const { data } = await axios.get<SearchResult>(`${API_BASE}/search`, {
