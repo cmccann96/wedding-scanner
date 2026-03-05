@@ -4,6 +4,8 @@ import type { ScoreBreakdown } from '../utils/scoring';
 import type { Filters } from '../types/filters';
 import { scoreProduct, getScoreColor, getScoreLabel } from '../utils/scoring';
 import { saveProduct, unsaveProduct, isSaved } from '../utils/saved';
+import { saveItem, unsaveItem } from '../api/auth';
+import { useAuth } from '../context/AuthContext';
 import ScoreModal from './ScoreModal';
 import FilterBar from './FilterBar';
 import ComparePanel from './ComparePanel';
@@ -25,6 +27,8 @@ interface CompareItem {
 }
 
 export default function ResultsSection({ result, onSaveChange }: Props) {
+  const { category, results } = result;
+  const { token } = useAuth();
   const [modal, setModal] = useState<ModalState | null>(null);
   const [filters, setFilters] = useState<Filters>(DEFAULT_FILTERS);
   const [compareIds, setCompareIds] = useState<string[]>([]);
@@ -33,7 +37,6 @@ export default function ResultsSection({ result, onSaveChange }: Props) {
     const saved = results.map(p => p.id).filter(id => isSaved(id));
     return new Set(saved);
   });
-  const { category, results } = result;
 
   const scored = results.map(p => ({ product: p, score: scoreProduct(p, results) }));
 
@@ -55,12 +58,14 @@ export default function ResultsSection({ result, onSaveChange }: Props) {
     }
   });
 
-  const toggleSave = (product: import('../types').Product) => {
+  const toggleSave = async (product: import('../types').Product) => {
     if (savedIds.has(product.id)) {
       unsaveProduct(product.id);
+      if (token) await unsaveItem(token, product.id);
       setSavedIds(prev => { const s = new Set(prev); s.delete(product.id); return s; });
     } else {
       saveProduct(product);
+      if (token) await saveItem(token, product);
       setSavedIds(prev => new Set([...prev, product.id]));
     }
     onSaveChange();

@@ -1,14 +1,18 @@
 import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import './App.css';
 import CategoryInput from './components/CategoryInput';
 import ResultsSection from './components/ResultsSection';
 import SkeletonCard from './components/SkeletonCard';
 import SavedDrawer from './components/SavedDrawer';
 import { searchAllCategories } from './api/search';
+import { useAuth } from './context/AuthContext';
 import type { SearchResult } from './types';
 import { getSaved } from './utils/saved';
 
 function App() {
+  const { user, logout } = useAuth();
+  const navigate = useNavigate();
   const [results, setResults] = useState<SearchResult[]>([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -41,9 +45,23 @@ function App() {
             <h1>💍 Wedding Scanner</h1>
             <p>Find the best deals on Alibaba &amp; AliExpress for your big day</p>
           </div>
-          <button className="saved-header-btn" onClick={() => setShowSaved(true)}>
-            🔖 Saved {savedCount > 0 && <span className="saved-count-badge">{savedCount}</span>}
-          </button>
+          <div className="header-actions">
+            {user ? (
+              <>
+                <span className="user-email">👤 {user.email}</span>
+                <button className="saved-header-btn" onClick={() => navigate('/dashboard')}>📋 My Saved</button>
+                <button className="saved-header-btn logout-btn" onClick={() => { logout(); }}>Sign Out</button>
+              </>
+            ) : (
+              <>
+                <button className="saved-header-btn" onClick={() => navigate('/login')}>Sign In</button>
+                <button className="saved-header-btn" onClick={() => navigate('/register')}>Register</button>
+              </>
+            )}
+            <button className="saved-header-btn" onClick={() => setShowSaved(true)}>
+              🔖 Saved {savedCount > 0 && <span className="saved-count-badge">{savedCount}</span>}
+            </button>
+          </div>
         </div>
       </header>
       <main className="app-main">
