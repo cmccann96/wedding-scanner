@@ -88,8 +88,8 @@ export default function MainApp() {
       <header className="app-header">
         <div className="header-top">
           <div>
-            <h1>💍 Wedding Scanner</h1>
-            <p>Find the best deals on Alibaba &amp; AliExpress for your big day</p>
+            <h1>CampCrowland AI Super Bot</h1>
+            <p>Super Smart AI Bot for the big Campcrowland Day</p>
           </div>
           <div className="header-actions">
             <span className="user-email">👤 {username}</span>
@@ -100,7 +100,7 @@ export default function MainApp() {
         </div>
         <div className="tab-bar">
           <button className={`tab-btn ${tab === 'scanner' ? 'active' : ''}`} onClick={() => setTab('scanner')}>
-            🔍 Wedding Scanner
+            🔍 Scanner
           </button>
           <button className={`tab-btn ${tab === 'dashboard' ? 'active' : ''}`} onClick={() => setTab('dashboard')}>
             🏠 My Dashboard {saved.length > 0 && tab !== 'dashboard' && <span className="tab-badge">{saved.length}</span>}

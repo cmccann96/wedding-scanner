@@ -30,7 +30,7 @@ export default function LoginPage() {
   return (
     <div className="auth-page">
       <div className="auth-card">
-        <h1>💍 Wedding Scanner</h1>
+        <h1>CampCrowland AI Super Bot</h1>
         <h2>Sign In</h2>
         <form onSubmit={handleSubmit} className="auth-form">
           <label>Username</label>

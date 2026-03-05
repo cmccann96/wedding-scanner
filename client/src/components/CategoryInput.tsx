@@ -8,12 +8,15 @@ export default function CategoryInput({ onSearch }: Props) {
   const [input, setInput] = useState('');
   const [categories, setCategories] = useState<string[]>([]);
 
-  const addCategory = () => {
-    const trimmed = input.trim();
-    if (trimmed && !categories.includes(trimmed)) {
-      setCategories([...categories, trimmed]);
+  const addAndSearch = (currentCategories: string[], newInput: string) => {
+    const trimmed = newInput.trim();
+    let updated = currentCategories;
+    if (trimmed && !currentCategories.includes(trimmed)) {
+      updated = [...currentCategories, trimmed];
+      setCategories(updated);
     }
     setInput('');
+    if (updated.length > 0) onSearch(updated);
   };
 
   const removeCategory = (cat: string) => {
@@ -21,7 +24,7 @@ export default function CategoryInput({ onSearch }: Props) {
   };
 
   const handleKeyDown = (e: KeyboardEvent<HTMLInputElement>) => {
-    if (e.key === 'Enter') addCategory();
+    if (e.key === 'Enter') addAndSearch(categories, input);
   };
 
   return (
@@ -35,7 +38,9 @@ export default function CategoryInput({ onSearch }: Props) {
           onKeyDown={handleKeyDown}
           className="category-text-input"
         />
-        <button onClick={addCategory} className="add-btn">Add</button>
+        <button onClick={() => addAndSearch(categories, input)} className="add-btn">
+          🔍 Search
+        </button>
       </div>
 
       {categories.length > 0 && (
@@ -47,12 +52,6 @@ export default function CategoryInput({ onSearch }: Props) {
             </span>
           ))}
         </div>
-      )}
-
-      {categories.length > 0 && (
-        <button className="search-btn" onClick={() => onSearch(categories)}>
-          🔍 Scan Alibaba &amp; AliExpress
-        </button>
       )}
     </div>
   );
