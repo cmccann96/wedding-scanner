@@ -1,8 +1,11 @@
 import { useState } from 'react';
 import type { SearchResult } from '../types';
 import type { ScoreBreakdown } from '../utils/scoring';
+import type { Filters } from '../types/filters';
 import { scoreProduct, getScoreColor, getScoreLabel } from '../utils/scoring';
 import ScoreModal from './ScoreModal';
+import FilterBar from './FilterBar';
+import { DEFAULT_FILTERS } from '../types/filters';
 
 interface Props {
   result: SearchResult;
@@ -15,11 +18,31 @@ interface ModalState {
 
 export default function ResultsSection({ result }: Props) {
   const [modal, setModal] = useState<ModalState | null>(null);
+  const [filters, setFilters] = useState<Filters>(DEFAULT_FILTERS);
   const { category, results } = result;
 
-  const scored = results
-    .map(p => ({ product: p, score: scoreProduct(p, results) }))
-    .sort((a, b) => b.score.total - a.score.total);
+  // Score all products first
+  const scored = results.map(p => ({ product: p, score: scoreProduct(p, results) }));
+
+  // Apply filters
+  const filtered = scored.filter(({ product: p, score }) => {
+    if (filters.platform !== 'both' && p.platform !== filters.platform) return false;
+    if (score.total < filters.minScore) return false;
+    if (p.price > 0 && p.price > filters.maxPrice) return false;
+    if (p.minOrderQty > filters.maxMoq) return false;
+    return true;
+  });
+
+  // Apply sort
+  const sorted = [...filtered].sort((a, b) => {
+    switch (filters.sort) {
+      case 'price-asc': return a.product.price - b.product.price;
+      case 'price-desc': return b.product.price - a.product.price;
+      case 'orders': return b.product.orderCount - a.product.orderCount;
+      case 'delivery': return (a.product.deliveryDays ?? 999) - (b.product.deliveryDays ?? 999);
+      default: return b.score.total - a.score.total;
+    }
+  });
 
   const aliexpressCount = results.filter(p => p.platform === 'aliexpress').length;
   const alibabaCount = results.filter(p => p.platform === 'alibaba').length;
@@ -42,11 +65,13 @@ export default function ResultsSection({ result }: Props) {
         </div>
       </div>
 
-      {scored.length === 0 ? (
-        <p className="empty-state">No results found for "{category}"</p>
+      <FilterBar filters={filters} onChange={setFilters} />
+
+      {sorted.length === 0 ? (
+        <p className="empty-state">No results match your filters for "{category}"</p>
       ) : (
         <div className="product-grid">
-          {scored.map(({ product: p, score }) => (
+          {sorted.map(({ product: p, score }) => (
             <a
               key={p.id}
               href={p.productUrl}
