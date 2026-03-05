@@ -129,15 +129,6 @@ export default function ResultsSection({ result, onSaveChange }: Props) {
               const isSelected = compareIds.includes(p.id);
               return (
                 <div key={p.id} className={`product-card-wrap ${isSelected ? 'selected' : ''}`}>
-                  <label className="compare-checkbox">
-                    <input
-                      type="checkbox"
-                      checked={isSelected}
-                      onChange={() => toggleCompare(p.id)}
-                      disabled={!isSelected && compareIds.length >= 3}
-                    />
-                    Compare
-                  </label>
                   <a
                     href={p.productUrl}
                     target="_blank"
@@ -157,13 +148,6 @@ export default function ResultsSection({ result, onSaveChange }: Props) {
                       >
                         {score.total}
                         <span className="score-label">{getScoreLabel(score.total)}</span>
-                      </button>
-                      <button
-                        className={`save-btn ${savedIds.has(p.id) ? 'saved' : ''}`}
-                        onClick={e => { e.preventDefault(); toggleSave(p); }}
-                        title={savedIds.has(p.id) ? 'Remove bookmark' : 'Save product'}
-                      >
-                        {savedIds.has(p.id) ? '🔖' : '🏷'}
                       </button>
                     </div>
                     <div className="product-info">
@@ -191,6 +175,21 @@ export default function ResultsSection({ result, onSaveChange }: Props) {
                       </div>
                     </div>
                   </a>
+                  <div className="card-actions">
+                    <button
+                      className={`card-action-btn compare-btn ${isSelected ? 'active' : ''}`}
+                      onClick={() => toggleCompare(p.id)}
+                      disabled={!isSelected && compareIds.length >= 3}
+                    >
+                      🔀 {isSelected ? 'Comparing' : 'Compare'}
+                    </button>
+                    <button
+                      className={`card-action-btn save-action-btn ${savedIds.has(p.id) ? 'saved' : ''}`}
+                      onClick={() => toggleSave(p)}
+                    >
+                      {savedIds.has(p.id) ? '🔖 Saved' : '🏷 Save'}
+                    </button>
+                  </div>
                 </div>
               );
             })}
