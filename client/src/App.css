@@ -40,8 +40,8 @@ body {
 
 .app-main {
   width: 100%;
-  max-width: 700px;
-  padding: 48px 24px;
+  max-width: 1400px;
+  padding: 40px 40px;
 }
 
 .category-input-container {
@@ -165,8 +165,8 @@ body {
 
 .product-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-  gap: 16px;
+  grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+  gap: 20px;
 }
 
 .product-card {
@@ -763,8 +763,7 @@ body {
   justify-content: space-between;
   align-items: center;
   width: 100%;
-  max-width: 700px;
-  margin: 0 auto;
+  max-width: 1400px;
 }
 
 .saved-header-btn {
